@@ -12,7 +12,7 @@ typedef enum {
 
 class State {
 private:
-    int startline = 0, corner = 0, L1, L2, R1, R2, s[2] = {0}, c[10] = {0};
+    uint8_t startline = 0, corner = 0, L1, L2, R1, R2, s[50] = {0}, c[50] = {0};
 public:
     car_s state = wait;
     void get_state();

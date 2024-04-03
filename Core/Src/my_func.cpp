@@ -7,7 +7,7 @@
 #define R_speed(pwmVal) __HAL_TIM_SetCompare(&htim4, TIM_CHANNEL_1, pwmVal);
 #define KP 1500
 #define KI 1
-#define KD 2000
+#define KD 4000
 #define K1 3
 #define K2 1
 #define K3 1
@@ -20,14 +20,14 @@ void State::get_state() {
     L2 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
     R1 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
     R2 = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_12);
-    s[1] = s[0];
-    for (int i = 9; i > 0; i--) c[i] = c[i - 1];
+    for (int i = 49; i > 0; i--) s[i] = s[i - 1];
+    for (int i = 49; i > 0; i--) c[i] = c[i - 1];
     
     if ((L1 | L2 | R1 | R2) == 0 && state == wait) return;
 
     if ((L1 | L2 | R1 | R2) == 0 && state == linewalk) s[0] = 1;
     else s[0] = 0;
-    if (s[0] - s[1] == 1) startline++;
+    if (s[0] - s[48] == 0 && s[0] - s[49] == 1) startline++;
 
     if ((L1 | L2 | R1) == 0 && R2 == 1 && state == linewalk) c[0] = 1;
     else c[0] = 0;
@@ -35,7 +35,7 @@ void State::get_state() {
     if (startline > 2)
         state = stop;
     
-    else if (c[0] - c[8] == 0 && c[0] - c[9] == 1)
+    else if (c[0] - c[48] == 0 && c[0] - c[49] == 1)
     {
         if (corner == 5) corner = 1;
         else corner++;
@@ -75,9 +75,9 @@ int Motor::range(int x) {
 
 int Motor::baseSpeed(int preset, const PID &pid) {
     int basespeed = preset - K * abs(pid.U);
-    if (basespeed > 1000)
+    if (basespeed > 0)
         return basespeed;
-    return 1000;
+    return 0;
 }
 
 void Motor::linewalk(int preset, const PID &pid) {
@@ -111,7 +111,7 @@ void Motor::stop() {
 
 void Motor::turnleft() {
     L_Back();
-    L_speed(3500);
+    L_speed(2500);
     R_Go();
     R_speed(3500);
 }

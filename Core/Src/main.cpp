@@ -18,18 +18,17 @@ int main() {
 
         case linewalk:
             pid.get_U(state);
-            motor.linewalk(1500, pid);
-            delay_us(500);
+            motor.linewalk(2750, pid);
+            delay_us(250);
             break;
 
-        case turnleft: 
-            HAL_Delay(300);
+        case turnleft:
             motor.turnleft();
-            HAL_Delay(270);
+            HAL_Delay(315);
             break;
 
         case stop:
-            HAL_Delay(600);
+            HAL_Delay(150);
             motor.stop();
             HAL_Delay(HAL_MAX_DELAY);
             break;
