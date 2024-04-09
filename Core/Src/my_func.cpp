@@ -5,9 +5,9 @@
 #define R_Back() {HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET); HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);}
 #define L_speed(pwmVal) __HAL_TIM_SetCompare(&htim4, TIM_CHANNEL_2, pwmVal);
 #define R_speed(pwmVal) __HAL_TIM_SetCompare(&htim4, TIM_CHANNEL_1, pwmVal);
-#define KP 1500
+#define KP 1400
 #define KI 1
-#define KD 4000
+#define KD 7000
 #define K1 3
 #define K2 1
 #define K3 1
@@ -21,7 +21,7 @@ void State::get_state() {
     R1 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
     R2 = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_12);
     for (int i = 49; i > 0; i--) s[i] = s[i - 1];
-    for (int i = 49; i > 0; i--) c[i] = c[i - 1];
+    for (int i = 199; i > 0; i--) c[i] = c[i - 1];
     
     if ((L1 | L2 | R1 | R2) == 0 && state == wait) return;
 
@@ -35,7 +35,7 @@ void State::get_state() {
     if (startline > 2)
         state = stop;
     
-    else if (c[0] - c[48] == 0 && c[0] - c[49] == 1)
+    else if (c[0] - c[88] == 0 && c[0] - c[89] == 1)
     {
         if (corner == 5) corner = 1;
         else corner++;
@@ -75,9 +75,9 @@ int Motor::range(int x) {
 
 int Motor::baseSpeed(int preset, const PID &pid) {
     int basespeed = preset - K * abs(pid.U);
-    if (basespeed > 0)
+    if (basespeed > 100)
         return basespeed;
-    return 0;
+    return 100;
 }
 
 void Motor::linewalk(int preset, const PID &pid) {
@@ -111,7 +111,7 @@ void Motor::stop() {
 
 void Motor::turnleft() {
     L_Back();
-    L_speed(2500);
+    L_speed(1900);
     R_Go();
-    R_speed(3500);
+    R_speed(3450);
 }
