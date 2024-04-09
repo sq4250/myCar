@@ -113,5 +113,5 @@ void Motor::turnleft() {
     L_Back();
     L_speed(1900);
     R_Go();
-    R_speed(3450);
+    R_speed(3350);
 }

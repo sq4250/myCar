@@ -28,7 +28,7 @@ int main() {
             break;
 
         case stop:
-            HAL_Delay(150);
+            HAL_Delay(100);
             motor.stop();
             HAL_Delay(HAL_MAX_DELAY);
             break;
