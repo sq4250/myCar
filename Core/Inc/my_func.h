@@ -21,9 +21,8 @@ public:
 
 class PID {
 private:
-    int err[3] = {0};
+    int err[3] = {0}, U = 0;
 public:
-    int U = 0;
     void get_U(const State &state);
     friend class Motor;
 };
